@@ -1,13 +1,19 @@
 package br.com.javablog.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import br.com.javablog.entity.Blog;
+import br.com.javablog.entity.Item;
 import br.com.javablog.entity.User;
+import br.com.javablog.exception.RssException;
 import br.com.javablog.jba.repository.BlogRepository;
+import br.com.javablog.jba.repository.ItemRepository;
 import br.com.javablog.jba.repository.UserRepository;
 
 @Service
@@ -18,12 +24,44 @@ public class BlogService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private RssService rssService;
+	
+	@Autowired
+	private ItemRepository itemRepository;
+	
+	public void saveItems(Blog blog){
+		try {
+			List<Item> items = rssService.getItems(blog.getUrl());
+			
+			for (Item item : items) {
+				Item savedItem = itemRepository.findByBlogAndLink(blog, item.getLink());
+				if(savedItem == null){
+					item.setBlog(blog);
+					itemRepository.save(item);
+				}
+			}
+		} catch (RssException e) {
+			e.printStackTrace();
+		}
+	}
+	//1 hour = 60 seconds * 80 minutes * 10000
+	@Scheduled(fixedDelay=3500000)
+	public void reloadBlogs(){
+		List<Blog> blogs = blogRepository.findAll();
+		
+		for (Blog blog : blogs) {
+			saveItems(blog);
+		}
+	}
 
 	public void save(Blog blog, String name) {
 		
 		User user = userRepository.findByName(name);
 		blog.setUser(user);
 		blogRepository.save(blog);
+		saveItems(blog);
 	}
 	
 	@PreAuthorize("#blog.user.name == authentication.name or hasRole('ROLE_ADMIN')")

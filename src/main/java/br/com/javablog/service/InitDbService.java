@@ -1,7 +1,6 @@
 package br.com.javablog.service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -12,7 +11,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.javablog.entity.Blog;
-import br.com.javablog.entity.Item;
 import br.com.javablog.entity.Role;
 import br.com.javablog.entity.User;
 import br.com.javablog.jba.repository.BlogRepository;
@@ -60,23 +58,23 @@ public class InitDbService {
 		
 		Blog blogjava = new Blog();
 		blogjava.setName("BlogJava");
-		blogjava.setUrl("http://google.com");
+		blogjava.setUrl("http://feeds.feedburner.com/javavids?format=xml");
 		blogjava.setUser(userAdmin);
 		blogRepository.save(blogjava);
 		
-		Item item1 = new Item();
-		item1.setBlog(blogjava);
-		item1.setTitle("first");
-		item1.setLink("http://google.com");
-		item1.setPublisheDate(new Date());
-		itemRepository.save(item1);
-		
-		Item item2 = new Item();
-		item2.setBlog(blogjava);
-		item2.setTitle("Second");
-		item2.setLink("http://google.com");
-		item2.setPublisheDate(new Date());
-		itemRepository.save(item2);
+//		Item item1 = new Item();
+//		item1.setBlog(blogjava);
+//		item1.setTitle("first");
+//		item1.setLink("http://www.javavids.com");
+//		item1.setPublishedDate(new Date());
+//		itemRepository.save(item1);
+//		
+//		Item item2 = new Item();
+//		item2.setBlog(blogjava);
+//		item2.setTitle("Second");
+//		item2.setLink("http://www.javavids.com");
+//		item2.setPublishedDate(new Date());
+//		itemRepository.save(item2);
 	}
 
 }

@@ -3,6 +3,7 @@ package br.com.javablog.entity;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -13,6 +14,8 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
 
+import br.com.javablog.annotation.UniqueUsername;
+
 @Entity
 public class User {
 	
@@ -21,6 +24,8 @@ public class User {
 	private Integer id;
 	
 	@Size(min=3, message = "Nome must be at least 3 characteres!")
+	@Column(unique = true)
+	@UniqueUsername(message="Such user name already exists!")
 	private String name;
 	
 	@Size(min=1, message = "Invalid email address!")

@@ -95,20 +95,31 @@
 	  	 	 <h1>${blog.name }</h1>
 			 <p>
 			 	<a href="<spring:url value="/blog/remove/${blog.id}.html"/>" class="btn btn-danger triggerRemove">remove blog</a>
-			 	${blog.url }</p>
+			 <c:out value="${blog.url }"/></p>
 			 
 			 <table class="table table-bordered table-hover table-striped">
 				<thead>
 					<tr>
-						<th>Title</th>
-						<th>Link</th>
+						<th>date</th>
+						<th>item</th>
 					</tr>
 				</thead>
 				<tbody>
 					<c:forEach items="${blog.items }" var="item">
 						<tr>
-							<td>${item.title }</td>
-							<td>${item.link }</td>				
+							<td><c:out value="${item.publishedDate }"/>
+								<br/>
+								<c:out value="${item.blog.name }"/>
+							</td>
+							<td>
+								<strong>
+									<a href="<c:out value="${item.link }"/>" target="_link">
+										<c:out value="${item.title }"/>
+									</a>
+								</strong>
+								<br/>
+								${item.description }
+							</td>				
 						</tr> 
 					</c:forEach>
 				</tbody>
